@@ -64,6 +64,14 @@ tar -xf FunKey-sdk-2.3.0.tar.gz
 #And this sets it up
 source $(pwd)/FunKey-sdk-2.3.0/environment-setup
 
+#There seems to be a python in the current version which has to fixed manually.
+#The line below will open the editor. Look for this line:
+# lib = cdll.LoadLibrary(f'lib{name}.so')
+#and change it to this:
+# lib = cdll.LoadLibrary('lib%s.so' % name)
+nano ./FunKey/output/target/usr/lib/python2.7/site-packages/pyudev/_ctyp
+eslib/utils.py
+
 #Ready, so we're switching to the build directory
 cd FunKey-OS
 
