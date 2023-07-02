@@ -26,7 +26,62 @@ However, if your development machine does not match this setup, there are still 
 
 In order to install one of these virtualized environments on your machine, please refer to the corresponding documentation.
 
-## Build on a Physical/Virtual Machine
+## Build on fresh Ubuntu 20.04.6 (step by step)
+This is the original environment for the build process and therefore the only one really tested.
+Is has recently (2023) been tested on WSL2, however a native or virtual Ubuntu 20.04.06 LTS machine should behave identically.
+
+<ins>Warning</ins>: Do not try 22.04; Building on 22.04 currently fails with Error 2 because the buildroot version used is not compatible.
+
+- If you're on Windows, install WSL Ubuntu 20.04.6 LTS from the Windows Store. Otherwise use your prefered install method and environment.
+- Set it up and start a shell
+- Enter the following commands:
+```bash
+#We'll set this up in the current user's home directory. But you can use any path
+cd ~
+
+#This procedure has only be tested as root, so enter your root password
+sudo su
+
+#Update the apt repositories
+apt-get update
+
+#Install prerequesites. Note that which is missing because it is not a separate package in 20.04. Answer with yes to install
+apt install bash bc binutils build-essential bzip2 ca-certificates cpio cvs expect file g++ gcc git gzip liblscp-dev libncurses5-dev locales make mercurial openssh-client patch perl procps python python-dev python3 python3-dev python3-distutils python3-setuptools rsync rsync sed subversion sudo tar unzip wget xxd zip
+
+#This would clone the RG branch of Bnazari's fork of DrUm78's fork of FunKey-OS if the # was removed.
+#It is listed as an example on how to clone a branch:
+# git clone --branch rg_nano_bn https://github.com/bnazari/FunKey-OS.git FunKey-OS
+#The actual command shown below clones the master branch of DrUm78's fork.
+#Please refer to each fork's documentation to select the one which is best for you
+git clone https://github.com/DrUm78/FunKey-OS.git FunKey-OS
+
+#This gets the previous SDK which is a prerequisite for building
+wget "https://github.com/FunKey-Project/FunKey-OS/releases/download/FunKey-OS-2.3.0/FunKey-sdk-2.3.0.tar.gz"
+
+#This extracts the SDK to the FunKey-sdk-2.3.0 directory
+tar -xf FunKey-sdk-2.3.0.tar.gz
+
+#And this sets it up
+source $(pwd)/FunKey-sdk-2.3.0/environment-setup
+
+#There seems to be a python in the current version which has to fixed manually.
+#The line below will open the editor. Look for this line:
+# lib = cdll.LoadLibrary(f'lib{name}.so')
+#and change it to this:
+# lib = cdll.LoadLibrary('lib%s.so' % name)
+nano ./FunKey/output/target/usr/lib/python2.7/site-packages/pyudev/_ctyp
+eslib/utils.py
+
+#Ready, so we're switching to the build directory
+cd FunKey-OS
+
+#And start building
+make sdk all
+
+```
+The build process will take a while. It took about 2 hours for me, so please be patient.
+
+## Build on other Physical/Virtual Machine
 
 ### Prerequisites
 While Buildroot itself will build most host packages it needs for the compilation, some standard Linux utilities are expected to be already installed on the host system. If not already present, you will need to install the following packages beforehand:
@@ -73,6 +128,18 @@ While Buildroot itself will build most host packages it needs for the compilatio
 On Ubuntu/Debian Linux, this is achieved by running the following command:
 ```bash
 $ sudo apt install bash bc binutils build-essential bzip2 ca-certificates cpio cvs expect file g++ gcc git gzip liblscp-dev libncurses5-dev locales make mercurial openssh-client patch perl procps python python-dev python3 python3-dev python3-distutils python3-setuptools rsync rsync sed subversion sudo tar unzip wget which xxd
+```
+
+You also need a previous version of the SDK installed:
+```bash
+#This gets the previous SDK which is a prerequisite for building
+wget "https://github.com/FunKey-Project/FunKey-OS/releases/download/FunKey-OS-2.3.0/FunKey-sdk-2.3.0.tar.gz"
+
+#This extracts the SDK to the FunKey-sdk-2.3.0 directory
+tar -xf FunKey-sdk-2.3.0.tar.gz
+
+#And this sets it up
+source $(pwd)/FunKey-sdk-2.3.0/environment-setup
 ```
 
 ### How to get the sources
