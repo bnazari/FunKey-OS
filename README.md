@@ -46,7 +46,7 @@ sudo su
 apt-get update
 
 #Install prerequesites. Note that which is missing because it is not a separate package in 20.04. Answer with yes to install
-apt install bash bc binutils build-essential bzip2 ca-certificates cpio cvs expect file g++ gcc git gzip liblscp-dev libncurses5-dev locales make mercurial openssh-client patch perl procps python python-dev python3 python3-dev python3-distutils python3-setuptools rsync rsync sed subversion sudo tar unzip wget xxd
+apt install bash bc binutils build-essential bzip2 ca-certificates cpio cvs expect file g++ gcc git gzip liblscp-dev libncurses5-dev locales make mercurial openssh-client patch perl procps python python-dev python3 python3-dev python3-distutils python3-setuptools rsync rsync sed subversion sudo tar unzip wget xxd zip
 
 #This would clone the RG branch of Bnazari's fork of DrUm78's fork of FunKey-OS if the # was removed.
 #It is listed as an example on how to clone a branch:
